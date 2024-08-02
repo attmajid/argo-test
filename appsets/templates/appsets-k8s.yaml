@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cronjob-cmp
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://git-codecommit.eu-central-1.amazonaws.com/v1/repos/platform-provisioning
+      revision: helm-moveto-argo
+      files:
+      - path: argocd-apps/apps/test/*
+  template:
+    metadata:
+      name: '{{ printf "{{ .path.filenameNormalized }}" }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://git-codecommit.eu-central-1.amazonaws.com/v1/repos/platform-provisioning
+        targetRevision: helm-moveto-argo
+        path: '{{ printf "{{ .path.path }}" }}'
+      destination:
+        server: https://kubernetes.default.svc

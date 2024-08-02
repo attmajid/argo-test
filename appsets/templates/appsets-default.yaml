@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: "{{ .values.helm.deploymentName }}"
+spec:
+  project: default
+  sources:
+  - repoURL: "{{ .values.helm.chartPath }}"
+    chart: "{{ .values.helm.chartName }}"
+    targetRevision: "{{ .values.helm.chartVersion }}"
+    helm:
+      releaseName: "{{ .values.helm.deploymentName }}"
+      valueFiles:
+      - "{{ .values.valuefile }}"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: "{{ .values.helm.namespace }}"
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - CreateNamespace=true

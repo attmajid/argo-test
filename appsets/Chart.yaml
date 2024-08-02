@@ -1,0 +1,7 @@
+#https://github.com/aws-controllers-k8s/ack-chart/blob/main/Chart.yaml
+apiVersion: v2
+name: argocd-appsets
+description: A Helm chart
+type: application
+version: 0.1.0
+appVersion: "0.0.0"
